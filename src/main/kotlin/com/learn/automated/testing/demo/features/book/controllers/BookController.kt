@@ -8,11 +8,9 @@ import com.learn.automated.testing.demo.features.book.response.BookItem
 import com.learn.automated.testing.demo.features.book.response.BookResponseList
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.validation.Errors
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 import java.util.*
-import javax.validation.Valid
 
 @RestController
 @Validated
@@ -52,9 +50,8 @@ class BookController (
             @RequestBody bookRequest: BookRequest
     ): ResponseEntity<BookDetailResponse> {
         val book = Book(
-                0,
-                bookRequest.title,
-                bookRequest.totalPage
+                title = bookRequest.title,
+                totalPage = bookRequest.totalPage
         )
         return ResponseEntity(
                 BookDetailResponse(

@@ -32,8 +32,8 @@ class BookControllerIT (
 
     @BeforeEach
     fun setUp() {
-        book = bookRepository.save(Book(1, "Test Title", 500))
-        bookRepository.save(Book(2, "Test Title 2", 590))
+        book = bookRepository.save(Book(title = "Test Title", totalPage =  500))
+        bookRepository.save(Book(title = "Test Title 2", totalPage = 590))
     }
 
     @AfterEach
@@ -116,7 +116,7 @@ class BookControllerIT (
     @Test
     fun shouldBeAbleToUpdateABook() {
         val response: ResponseEntity<BookDetailResponse> = sendUpdateRequest(
-                book.id,
+                book.id!!,
                 BookRequest("Test Updated Title", 400)
         )
         assertThat(response.body?.getBook()?.getTitle()).isEqualTo("Test Updated Title")
