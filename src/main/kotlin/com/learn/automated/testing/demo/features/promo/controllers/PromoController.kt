@@ -21,7 +21,9 @@ class PromoController (
 ) {
 
     @PostMapping("/api/promo")
-    fun create(@RequestBody promoRequest: PromoRequest): ResponseEntity<PromoDetailResponse> {
+    fun create(
+            @RequestBody promoRequest: PromoRequest
+    ): ResponseEntity<PromoDetailResponse> {
         val book: Optional<Book> = bookRepository.findById(promoRequest.bookId)
         if (!book.isPresent) {
             return ResponseEntity(

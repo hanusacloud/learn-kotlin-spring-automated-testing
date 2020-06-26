@@ -1,32 +1,27 @@
 package com.learn.automated.testing.demo.integrations.book
 
-import com.learn.automated.testing.demo.DemoApplication
 import com.learn.automated.testing.demo.features.book.BookRepository
 import com.learn.automated.testing.demo.features.book.controllers.BookController
 import com.learn.automated.testing.demo.features.book.models.Book
 import com.learn.automated.testing.demo.features.book.request.BookRequest
 import com.learn.automated.testing.demo.features.book.response.BookDetailResponse
 import com.learn.automated.testing.demo.features.book.response.BookResponseList
+import com.learn.automated.testing.demo.integrations.BaseIntegration
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.web.client.TestRestTemplate
-import org.springframework.boot.web.server.LocalServerPort
 import org.springframework.http.*
-import org.springframework.test.context.ContextConfiguration
 
 @SpringBootTest(
         classes = [BookController::class],
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ContextConfiguration(classes = [DemoApplication::class])
-class BookControllerIT (
-        @Autowired val bookRepository: BookRepository,
-        @Autowired val restTemplate: TestRestTemplate,
-        @LocalServerPort val port: Int
-) {
+class BookControllerIT : BaseIntegration() {
+
+    @Autowired
+    protected lateinit var bookRepository: BookRepository
 
     lateinit var book: Book
 
@@ -41,8 +36,6 @@ class BookControllerIT (
         bookRepository.deleteAll()
         bookRepository.flush()
     }
-
-    fun getUrl(path: String): String = "http://localhost:${port}" + path
 
     private fun <T> sendRequest(path: String, type: Class<T>) : ResponseEntity<T> {
         val httpHeaders = HttpHeaders()
