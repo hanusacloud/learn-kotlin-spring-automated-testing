@@ -5,7 +5,7 @@ import com.learn.automated.testing.demo.features.book.exceptions.BookException
 import com.learn.automated.testing.demo.features.book.models.Book
 import com.learn.automated.testing.demo.features.book.request.BookRequest
 import com.learn.automated.testing.demo.features.book.response.BookDetailResponse
-import com.learn.automated.testing.demo.features.book.response.BookItem
+import com.learn.automated.testing.demo.features.book.response.BookResponse
 import com.learn.automated.testing.demo.features.book.response.BookResponseList
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -40,7 +40,7 @@ class BookController (
                 BookResponseList(
                         true,
                         "success",
-                        book.map { e -> BookItem(e) }.toList()),
+                        book.map { e -> BookResponse(e) }.toList()),
                 HttpStatus.OK
         )
     }

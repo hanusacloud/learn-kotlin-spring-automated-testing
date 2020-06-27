@@ -1,6 +1,5 @@
 package com.learn.automated.testing.demo.integrations.book
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.learn.automated.testing.demo.features.book.BookRepository
 import com.learn.automated.testing.demo.features.book.controllers.BookController
 import com.learn.automated.testing.demo.features.book.models.Book
@@ -122,7 +121,6 @@ class BookControllerIT : BaseIntegration() {
                 9999999,
                 BookRequest("Test Updated Title", 400)
         )
-        println(ObjectMapper().writeValueAsString(response))
         assertThat(response.body?.message).isEqualTo("Book not found!")
     }
 

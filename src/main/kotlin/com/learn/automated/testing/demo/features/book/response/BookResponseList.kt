@@ -8,11 +8,11 @@ class BookResponseList @JsonCreator
 constructor(
         @JsonProperty("status") status: Boolean,
         @JsonProperty("message") message: String,
-        @JsonProperty("items") items: List<BookItem>
+        @JsonProperty("items") responses: List<BookResponse>
 ) : BaseResponse(status, message) {
 
-    private val items: List<BookItem>? = items
+    private val responses: List<BookResponse>? = responses
 
-    fun getItems(): List<BookItem>? = items
+    fun getItems(): List<BookResponse>? = responses
 
 }
