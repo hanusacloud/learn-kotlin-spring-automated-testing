@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import com.learn.automated.testing.demo.features.book.models.Book
 import java.util.*
 
-class BookItem {
+class BookResponse {
 
     private val id: Long
     private val title: String
