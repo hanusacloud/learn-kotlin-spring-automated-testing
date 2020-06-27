@@ -56,29 +56,27 @@ class PromoControllerIT : BaseIntegration() {
         )
     }
 
-    @Test
-    fun shouldBeAbleToCreatePromo() {
-        val response: ResponseEntity<PromoDetailResponse> = sendCreateRequest(
+    fun sendCreateRequest(bookId: Long) : ResponseEntity<PromoDetailResponse> {
+        return sendCreateRequest(
                 PromoRequest(
-                        bookId = book.id!!,
+                        bookId = bookId,
                         startDate = Date(),
                         endDate = Date()
                 ),
                 PromoDetailResponse::class.java
         )
-        assertThat(response.body?.getPromo()?.book?.getTitle()).isEqualTo("Test Book For Promo")
+    }
+
+    @Test
+    fun shouldBeAbleToCreatePromo() {
+        val response = sendCreateRequest(book.id!!)
+        assertThat(response.body?.getPromo()?.book?.getTitle())
+                .isEqualTo("Test Book For Promo")
     }
 
     @Test
     fun shouldNotBeAbleToCreatePromoOnNonExistingBook() {
-        val response: ResponseEntity<PromoDetailResponse> = sendCreateRequest(
-                PromoRequest(
-                        bookId = 9999999L,
-                        startDate = Date(),
-                        endDate = Date()
-                ),
-                PromoDetailResponse::class.java
-        )
+        val response = sendCreateRequest(99999999)
         assertThat(response.body?.message).isEqualTo("Book not found!")
     }
 
