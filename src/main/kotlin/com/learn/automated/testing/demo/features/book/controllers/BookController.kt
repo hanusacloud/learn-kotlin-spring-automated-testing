@@ -1,6 +1,7 @@
 package com.learn.automated.testing.demo.features.book.controllers
 
 import com.learn.automated.testing.demo.features.book.BookRepository
+import com.learn.automated.testing.demo.features.book.exceptions.BookException
 import com.learn.automated.testing.demo.features.book.models.Book
 import com.learn.automated.testing.demo.features.book.request.BookRequest
 import com.learn.automated.testing.demo.features.book.response.BookDetailResponse
@@ -14,18 +15,17 @@ import java.util.*
 
 @RestController
 @Validated
+@RequestMapping("/api/book")
 class BookController (
         val repository: BookRepository
 ) {
 
-    @GetMapping("/api/book/{id}")
+    @GetMapping("/{id}")
+    @Throws(BookException::class)
     fun getDetail(@PathVariable(name = "id") id: Long): ResponseEntity<BookDetailResponse> {
         val book: Optional<Book> = repository.findById(id)
         if (!book.isPresent) {
-            return ResponseEntity(
-                    BookDetailResponse("Book not found!"),
-                    HttpStatus.OK
-            )
+            throw BookException.notFound()
         }
         return ResponseEntity(
                 BookDetailResponse(true, "success", book.get()),
@@ -33,7 +33,7 @@ class BookController (
         )
     }
 
-    @GetMapping("/api/books")
+    @GetMapping("/list")
     fun getList(): ResponseEntity<BookResponseList> {
         val book: List<Book> = repository.findAll()
         return ResponseEntity(
@@ -45,7 +45,7 @@ class BookController (
         )
     }
 
-    @PostMapping("/api/book")
+    @PostMapping("/create")
     fun create(
             @RequestBody bookRequest: BookRequest
     ): ResponseEntity<BookDetailResponse> {
@@ -63,17 +63,15 @@ class BookController (
         )
     }
 
-    @PutMapping("/api/book/{id}")
+    @PutMapping("/update/{id}")
+    @Throws(BookException::class)
     fun update(
             @PathVariable(name = "id") id: Long,
             @RequestBody bookRequest: BookRequest
     ): ResponseEntity<BookDetailResponse> {
         val bookOptional: Optional<Book> = repository.findById(id)
         if (!bookOptional.isPresent) {
-            return ResponseEntity(
-                    BookDetailResponse("Book not found!"),
-                    HttpStatus.OK
-            )
+            throw BookException.notFound()
         }
         val book = bookOptional.get()
         book.title = bookRequest.title

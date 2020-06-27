@@ -1,5 +1,6 @@
 package com.learn.automated.testing.demo.integrations.book
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.learn.automated.testing.demo.features.book.BookRepository
 import com.learn.automated.testing.demo.features.book.controllers.BookController
 import com.learn.automated.testing.demo.features.book.models.Book
@@ -57,7 +58,7 @@ class BookControllerIT : BaseIntegration() {
         httpHeaders.contentType = MediaType.APPLICATION_JSON
         val entity: HttpEntity<BookRequest> = HttpEntity(bookRequest, httpHeaders)
         return restTemplate.exchange(
-                getUrl("/api/book"),
+                getUrl("/api/book/create"),
                 HttpMethod.POST,
                 entity,
                 type
@@ -72,7 +73,7 @@ class BookControllerIT : BaseIntegration() {
         httpHeaders.contentType = MediaType.APPLICATION_JSON
         val entity: HttpEntity<BookRequest> = HttpEntity(bookRequest, httpHeaders)
         return restTemplate.exchange(
-                getUrl("/api/book/${id}"),
+                getUrl("/api/book/update/${id}"),
                 HttpMethod.PUT,
                 entity,
                 BookDetailResponse::class.java
@@ -100,7 +101,7 @@ class BookControllerIT : BaseIntegration() {
     @Test
     fun shouldBeAbleToReturnBookList() {
         val response: ResponseEntity<BookResponseList> = sendRequest(
-                "/api/books",
+                "/api/book/list",
                 BookResponseList::class.java
         )
         assertThat(response.body?.getItems()?.size).isEqualTo(2)
@@ -121,6 +122,7 @@ class BookControllerIT : BaseIntegration() {
                 9999999,
                 BookRequest("Test Updated Title", 400)
         )
+        println(ObjectMapper().writeValueAsString(response))
         assertThat(response.body?.message).isEqualTo("Book not found!")
     }
 

@@ -15,7 +15,7 @@ class PromoDetailResponse : BaseResponse {
     constructor(
             @JsonProperty("status") status: Boolean,
             @JsonProperty("message") message: String,
-            @JsonProperty("promo") promo: PromoItem
+            @JsonProperty("promo") promo: PromoItem?
     ) : super (status, message) {
         this.promo = promo
     }
