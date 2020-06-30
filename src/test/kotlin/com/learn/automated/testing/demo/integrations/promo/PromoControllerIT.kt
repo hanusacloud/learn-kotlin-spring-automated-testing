@@ -11,6 +11,8 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.*
@@ -41,13 +43,13 @@ class PromoControllerIT : BaseIntegration() {
         bookRepository.flush()
     }
 
-    fun <T> sendCreateRequest(
-            promoRequest: PromoRequest,
+    fun <T, P> sendCreateRequest(
+            promoRequest: P,
             type: Class<T>
     ): ResponseEntity<T> {
         val httpHeaders = HttpHeaders()
         httpHeaders.contentType = MediaType.APPLICATION_JSON
-        val entity: HttpEntity<PromoRequest> = HttpEntity(promoRequest, httpHeaders)
+        val entity: HttpEntity<P> = HttpEntity(promoRequest, httpHeaders)
         return restTemplate.exchange(
                 getUrl("/api/promo"),
                 HttpMethod.POST,
@@ -78,6 +80,24 @@ class PromoControllerIT : BaseIntegration() {
     fun shouldNotBeAbleToCreatePromoOnNonExistingBook() {
         val response = sendCreateRequest(99999999)
         assertThat(response.body?.message).isEqualTo("Book not found!")
+    }
+
+    @ParameterizedTest
+    @CsvSource(value = [
+        "{\"book_id\":77,\"start_date\":1593523779655};End date can not be null!",
+        "{\"book_id\":77,\"end_date\":1593523779655};Start date can not be null!"
+    ], delimiter = ';')
+    fun shouldNotBeAbleToCreatePromoWhenMissingStartDateOrEndDate(
+            request: String,
+            expected: String
+    ) {
+        val response = sendCreateRequest(request, PromoDetailResponse::class.java)
+        assertThat(response.body?.errorMessages)
+                .containsAnyElementsOf(
+                        arrayListOf(
+                                expected
+                        )
+                )
     }
 
 }

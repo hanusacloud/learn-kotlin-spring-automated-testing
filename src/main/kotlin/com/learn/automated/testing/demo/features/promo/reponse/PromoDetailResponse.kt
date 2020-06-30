@@ -33,10 +33,6 @@ class PromoDetailResponse : BaseResponse {
         )
     }
 
-    constructor(message: String) : super (false, message) {
-        this.promo = null
-    }
-
     fun getPromo(): PromoResponse? = promo
 
 }

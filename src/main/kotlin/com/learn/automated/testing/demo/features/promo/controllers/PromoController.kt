@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RestController
 import java.util.*
+import javax.validation.Valid
 
 @RestController
 @RequestMapping("/api/promo")
@@ -26,7 +27,7 @@ class PromoController (
     @RequestMapping(method = [RequestMethod.POST])
     @Throws(BookException::class)
     fun create(
-            @RequestBody promoRequest: PromoRequest
+            @Valid @RequestBody promoRequest: PromoRequest
     ): ResponseEntity<PromoDetailResponse> {
         val book: Optional<Book> = bookRepository.findById(promoRequest.bookId)
         if (!book.isPresent) {
@@ -34,8 +35,8 @@ class PromoController (
         }
         val promo = Promo(
                 book = book.get(),
-                startDate = promoRequest.startDate,
-                endDate = promoRequest.endDate
+                startDate = promoRequest.startDate!!,
+                endDate = promoRequest.endDate!!
         )
         return ResponseEntity(
                 PromoDetailResponse(
