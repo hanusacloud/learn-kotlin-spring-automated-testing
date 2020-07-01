@@ -27,8 +27,8 @@ class BookControllerIT : BaseIntegration() {
 
     @BeforeEach
     fun setUp() {
-        book = bookRepository.save(Book(title = "Test Title", totalPage =  500))
-        bookRepository.save(Book(title = "Test Title 2", totalPage = 590))
+        book = bookRepository.save(Book(title = "Test Title", totalPage =  500, price = 100))
+        bookRepository.save(Book(title = "Test Title 2", totalPage = 590, price = 200))
     }
 
     @AfterEach
@@ -94,7 +94,7 @@ class BookControllerIT : BaseIntegration() {
                 "/api/book/99999999",
                 BookDetailResponse::class.java
         )
-        assertThat(response.body?.message).isEqualTo("Book not found!")
+        assertThat(response.body?.getMessage()).isEqualTo("Book not found!")
     }
 
     @Test
@@ -110,7 +110,7 @@ class BookControllerIT : BaseIntegration() {
     fun shouldBeAbleToUpdateABook() {
         val response: ResponseEntity<BookDetailResponse> = sendUpdateRequest(
                 book.id!!,
-                BookRequest("Test Updated Title", 400)
+                BookRequest("Test Updated Title", 400, 300)
         )
         assertThat(response.body?.getBook()?.getTitle()).isEqualTo("Test Updated Title")
     }
@@ -119,18 +119,60 @@ class BookControllerIT : BaseIntegration() {
     fun shouldNotBeAbleToUpdateABook() {
         val response: ResponseEntity<BookDetailResponse> = sendUpdateRequest(
                 9999999,
-                BookRequest("Test Updated Title", 400)
+                BookRequest("Test Updated Title", 400, 100)
         )
-        assertThat(response.body?.message).isEqualTo("Book not found!")
+        assertThat(response.body?.getMessage()).isEqualTo("Book not found!")
     }
 
     @Test
     fun shouldBeAbleToCreateABook() {
         val response: ResponseEntity<BookDetailResponse> = sendCreateRequest(
-                BookRequest("Test Create Title", 200),
+                BookRequest("Test Create Title", 200, 60),
                 BookDetailResponse::class.java
         )
         assertThat(response.body?.getBook()?.getTitle()).isEqualTo("Test Create Title")
+    }
+
+    @Test
+    fun shouldNotBeAbleToCreateBookOnBlankTitle() {
+        val response: ResponseEntity<BookDetailResponse> = sendCreateRequest(
+                BookRequest("", 200, 0),
+                BookDetailResponse::class.java
+        )
+        assertThat(response.body?.getErrorMessages())
+                .containsAnyElementsOf(
+                        arrayListOf(
+                                "Title can not be empty!"
+                        )
+                )
+    }
+
+    @Test
+    fun shouldNotBeAbleToCreateBookOnZeroPrice() {
+        val response: ResponseEntity<BookDetailResponse> = sendCreateRequest(
+                BookRequest("Test Create With Zero Price", 200, 0),
+                BookDetailResponse::class.java
+        )
+        assertThat(response.body?.getErrorMessages())
+                .containsAnyElementsOf(
+                        arrayListOf(
+                                "Fill the price!"
+                        )
+                )
+    }
+
+    @Test
+    fun shouldNotBeAbleToCreateBookOnZeroTotalPage() {
+        val response: ResponseEntity<BookDetailResponse> = sendCreateRequest(
+                BookRequest("Test Create With Zero Total Page", 0, 560),
+                BookDetailResponse::class.java
+        )
+        assertThat(response.body?.getErrorMessages())
+                .containsAnyElementsOf(
+                        arrayListOf(
+                                "Fill total page!"
+                        )
+                )
     }
 
 }

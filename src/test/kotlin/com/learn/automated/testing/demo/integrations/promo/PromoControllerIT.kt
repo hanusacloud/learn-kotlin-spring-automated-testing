@@ -32,7 +32,7 @@ class PromoControllerIT : BaseIntegration() {
 
     @BeforeEach
     fun setUp() {
-        book = bookRepository.save(Book(title = "Test Book For Promo", totalPage = 500))
+        book = bookRepository.save(Book(title = "Test Book For Promo", totalPage = 500, price = 300))
     }
 
     @AfterEach
@@ -79,7 +79,7 @@ class PromoControllerIT : BaseIntegration() {
     @Test
     fun shouldNotBeAbleToCreatePromoOnNonExistingBook() {
         val response = sendCreateRequest(99999999)
-        assertThat(response.body?.message).isEqualTo("Book not found!")
+        assertThat(response.body?.getMessage()).isEqualTo("Book not found!")
     }
 
     @ParameterizedTest
@@ -92,7 +92,7 @@ class PromoControllerIT : BaseIntegration() {
             expected: String
     ) {
         val response = sendCreateRequest(request, PromoDetailResponse::class.java)
-        assertThat(response.body?.errorMessages)
+        assertThat(response.body?.getErrorMessages())
                 .containsAnyElementsOf(
                         arrayListOf(
                                 expected

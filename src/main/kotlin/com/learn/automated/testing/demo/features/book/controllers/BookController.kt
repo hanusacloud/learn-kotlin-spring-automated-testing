@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 import java.util.*
+import javax.validation.Valid
 
 @RestController
 @Validated
@@ -47,11 +48,12 @@ class BookController (
 
     @PostMapping("/create")
     fun create(
-            @RequestBody bookRequest: BookRequest
+            @Valid @RequestBody bookRequest: BookRequest
     ): ResponseEntity<BookDetailResponse> {
         val book = Book(
                 title = bookRequest.title,
-                totalPage = bookRequest.totalPage
+                totalPage = bookRequest.totalPage,
+                price = bookRequest.price
         )
         return ResponseEntity(
                 BookDetailResponse(
