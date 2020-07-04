@@ -1,7 +1,8 @@
-package com.learn.automated.testing.demo.exception
+package com.learn.automated.testing.demo.shared.exception
 
 import com.learn.automated.testing.demo.features.book.exceptions.BookException
 import com.learn.automated.testing.demo.shared.responses.BaseResponse
+import com.learn.automated.testing.demo.shared.utils.Translation
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -34,7 +35,7 @@ class ErrorHandler : ResponseEntityExceptionHandler() {
         super.handleMethodArgumentNotValid(ex, headers, status, request)
         val errorMessages: MutableList<String> = mutableListOf()
         for (objectError in ex.bindingResult.allErrors) {
-            errorMessages.add(objectError.defaultMessage ?: "Oops.. something wrong")
+            objectError.defaultMessage?.let { errorMessages.add(Translation.getMessage(it)) }
         }
         return ResponseEntity(
                 BaseResponse(
