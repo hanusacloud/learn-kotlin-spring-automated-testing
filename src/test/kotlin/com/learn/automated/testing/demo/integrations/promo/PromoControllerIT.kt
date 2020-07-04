@@ -12,7 +12,7 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.CsvSource
+import org.junit.jupiter.params.provider.CsvFileSource
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.*
@@ -63,7 +63,8 @@ class PromoControllerIT : BaseIntegration() {
                 PromoRequest(
                         bookId = bookId,
                         startDate = Date(),
-                        endDate = Date()
+                        endDate = Date(),
+                        promoPrice = 390
                 ),
                 PromoDetailResponse::class.java
         )
@@ -83,16 +84,16 @@ class PromoControllerIT : BaseIntegration() {
     }
 
     @ParameterizedTest
-    @CsvSource(value = [
-        "{\"book_id\":null,\"start_date\":1593523779655,\"end_date\":1593523779655};Book id not found!",
-        "{\"book_id\":77,\"start_date\":1593523779655};Fill end date!",
-        "{\"book_id\":77,\"end_date\":1593523779655};Fill start date!"
-    ], delimiter = ';')
-    fun shouldNotBeAbleToCreatePromoWhenMissingStartDateOrEndDate(
-            request: String,
+    @CsvFileSource(
+            resources = ["/promo/promo_validation_expectation.csv"],
+            delimiter = ';',
+            numLinesToSkip = 1
+    )
+    fun shouldNotBeAbleToCreatePromoWhenMissingValue(
+            jsonRequest: String,
             expected: String
     ) {
-        val response = sendCreateRequest(request, PromoDetailResponse::class.java)
+        val response = sendCreateRequest(jsonRequest, PromoDetailResponse::class.java)
         assertThat(response.body?.getErrorMessages())
                 .containsAnyElementsOf(
                         arrayListOf(

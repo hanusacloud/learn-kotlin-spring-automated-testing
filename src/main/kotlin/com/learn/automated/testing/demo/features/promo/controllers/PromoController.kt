@@ -36,7 +36,8 @@ class PromoController (
         val promo = Promo(
                 book = book.get(),
                 startDate = promoRequest.startDate!!,
-                endDate = promoRequest.endDate!!
+                endDate = promoRequest.endDate!!,
+                promoPrice = promoRequest.promoPrice!!
         )
         return ResponseEntity(
                 PromoDetailResponse(
