@@ -12,7 +12,7 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.CsvSource
+import org.junit.jupiter.params.provider.CsvFileSource
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.*
@@ -135,17 +135,11 @@ class BookControllerIT : BaseIntegration() {
         assertThat(response.body?.getBook()?.getTitle()).isEqualTo("Test Create Title")
     }
 
-    @ParameterizedTest()
-    @CsvSource(
-            value = [
-                "{\"title\":null,\"total_page\":200,\"price\":34};Title can not be empty!",
-                "{\"title\":\"\",\"total_page\":200,\"price\":34};Title can not be empty!",
-                "{\"title\":\"Title for empty total page\",\"total_page\":0,\"price\":34};Total page must be greater than zero!",
-                "{\"title\":\"Title for empty total page\",\"total_page\":null,\"price\":34};Fill total page!",
-                "{\"title\":\"Title for empty price\",\"total_page\":30,\"price\":0};Price must be greater than zero!",
-                "{\"title\":\"Title for empty price\",\"total_page\":30,\"price\":null};Fill the price!"
-            ],
-            delimiter = ';'
+    @ParameterizedTest
+    @CsvFileSource(
+            resources = ["/book/book_validation_expectation.csv"],
+            delimiter = ';',
+            numLinesToSkip = 1
     )
     fun shouldBeAbleToTestFormRequestValidation(jsonRequest: String, expected: String) {
         val response: ResponseEntity<BookDetailResponse> = sendCreateRequest(

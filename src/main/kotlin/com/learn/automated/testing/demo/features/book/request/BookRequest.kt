@@ -11,10 +11,12 @@ data class BookRequest @JsonCreator constructor (
         @field:NotNull(message = "Title can not be empty!")
         @field:NotBlank(message = "Title can not be empty!")
         val title: String?,
+
         @field:NotNull(message = "Fill total page!")
         @field:Min(value = 1, message = "Total page must be greater than zero!")
         @JsonProperty("total_page")
         val totalPage: Int?,
+
         @field:NotNull(message = "Fill the price!")
         @field:Min(value = 1, message = "Price must be greater than zero!")
         @JsonProperty("price")
