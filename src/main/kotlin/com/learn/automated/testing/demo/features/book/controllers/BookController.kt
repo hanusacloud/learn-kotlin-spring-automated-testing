@@ -51,9 +51,9 @@ class BookController (
             @Valid @RequestBody bookRequest: BookRequest
     ): ResponseEntity<BookDetailResponse> {
         val book = Book(
-                title = bookRequest.title,
-                totalPage = bookRequest.totalPage,
-                price = bookRequest.price
+                title = bookRequest.title!!,
+                totalPage = bookRequest.totalPage!!,
+                price = bookRequest.price!!
         )
         return ResponseEntity(
                 BookDetailResponse(
@@ -76,8 +76,8 @@ class BookController (
             throw BookException.notFound()
         }
         val book = bookOptional.get()
-        book.title = bookRequest.title
-        book.totalPage = bookRequest.totalPage
+        book.title = bookRequest.title!!
+        book.totalPage = bookRequest.totalPage!!
         return ResponseEntity(
                 BookDetailResponse(true, "success", repository.save(book)),
                 HttpStatus.OK

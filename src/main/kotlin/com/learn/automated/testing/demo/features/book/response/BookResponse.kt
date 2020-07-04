@@ -28,7 +28,7 @@ class BookResponse {
     constructor(
             book: Book
     ) {
-        this.id = book.id ?: 0
+        this.id = book.id!!
         this.title = book.title
         this.totalPage = book.totalPage
         this.createdAt = book.createdAt

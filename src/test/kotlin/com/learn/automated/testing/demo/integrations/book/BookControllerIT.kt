@@ -11,6 +11,8 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.*
@@ -49,13 +51,13 @@ class BookControllerIT : BaseIntegration() {
         )
     }
 
-    fun <T> sendCreateRequest(
-            bookRequest: BookRequest,
+    fun <T, P> sendCreateRequest(
+            bookRequest: P,
             type: Class<T>
     ): ResponseEntity<T> {
         val httpHeaders = HttpHeaders()
         httpHeaders.contentType = MediaType.APPLICATION_JSON
-        val entity: HttpEntity<BookRequest> = HttpEntity(bookRequest, httpHeaders)
+        val entity: HttpEntity<P> = HttpEntity(bookRequest, httpHeaders)
         return restTemplate.exchange(
                 getUrl("/api/book/create"),
                 HttpMethod.POST,
@@ -133,44 +135,27 @@ class BookControllerIT : BaseIntegration() {
         assertThat(response.body?.getBook()?.getTitle()).isEqualTo("Test Create Title")
     }
 
-    @Test
-    fun shouldNotBeAbleToCreateBookOnBlankTitle() {
+    @ParameterizedTest()
+    @CsvSource(
+            value = [
+                "{\"title\":null,\"total_page\":200,\"price\":34};Title can not be empty!",
+                "{\"title\":\"\",\"total_page\":200,\"price\":34};Title can not be empty!",
+                "{\"title\":\"Title for empty total page\",\"total_page\":0,\"price\":34};Total page must be greater than zero!",
+                "{\"title\":\"Title for empty total page\",\"total_page\":null,\"price\":34};Fill total page!",
+                "{\"title\":\"Title for empty price\",\"total_page\":30,\"price\":0};Price must be greater than zero!",
+                "{\"title\":\"Title for empty price\",\"total_page\":30,\"price\":null};Fill the price!"
+            ],
+            delimiter = ';'
+    )
+    fun shouldBeAbleToTestFormRequestValidation(jsonRequest: String, expected: String) {
         val response: ResponseEntity<BookDetailResponse> = sendCreateRequest(
-                BookRequest("", 200, 0),
+                jsonRequest,
                 BookDetailResponse::class.java
         )
         assertThat(response.body?.getErrorMessages())
                 .containsAnyElementsOf(
                         arrayListOf(
-                                "Title can not be empty!"
-                        )
-                )
-    }
-
-    @Test
-    fun shouldNotBeAbleToCreateBookOnZeroPrice() {
-        val response: ResponseEntity<BookDetailResponse> = sendCreateRequest(
-                BookRequest("Test Create With Zero Price", 200, 0),
-                BookDetailResponse::class.java
-        )
-        assertThat(response.body?.getErrorMessages())
-                .containsAnyElementsOf(
-                        arrayListOf(
-                                "Fill the price!"
-                        )
-                )
-    }
-
-    @Test
-    fun shouldNotBeAbleToCreateBookOnZeroTotalPage() {
-        val response: ResponseEntity<BookDetailResponse> = sendCreateRequest(
-                BookRequest("Test Create With Zero Total Page", 0, 560),
-                BookDetailResponse::class.java
-        )
-        assertThat(response.body?.getErrorMessages())
-                .containsAnyElementsOf(
-                        arrayListOf(
-                                "Fill total page!"
+                                expected
                         )
                 )
     }
