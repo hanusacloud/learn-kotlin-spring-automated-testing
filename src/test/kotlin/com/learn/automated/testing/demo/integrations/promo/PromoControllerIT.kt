@@ -84,8 +84,9 @@ class PromoControllerIT : BaseIntegration() {
 
     @ParameterizedTest
     @CsvSource(value = [
-        "{\"book_id\":77,\"start_date\":1593523779655};End date can not be null!",
-        "{\"book_id\":77,\"end_date\":1593523779655};Start date can not be null!"
+        "{\"book_id\":null,\"start_date\":1593523779655,\"end_date\":1593523779655};Book id not found!",
+        "{\"book_id\":77,\"start_date\":1593523779655};Fill end date!",
+        "{\"book_id\":77,\"end_date\":1593523779655};Fill start date!"
     ], delimiter = ';')
     fun shouldNotBeAbleToCreatePromoWhenMissingStartDateOrEndDate(
             request: String,

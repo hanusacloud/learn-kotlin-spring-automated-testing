@@ -7,11 +7,14 @@ import javax.validation.constraints.NotNull
 
 data class PromoRequest @JsonCreator constructor (
         @JsonProperty("book_id")
-        val bookId: Long = 0,
-        @field:NotNull(message = "Start date can not be null!")
+        @field:NotNull(message = "promo.book.id.notnull")
+        val bookId: Long? = 0,
+
+        @field:NotNull(message = "promo.start.date.notnull")
         @JsonProperty("start_date")
         val startDate: Date?,
-        @field:NotNull(message = "End date can not be null!")
+
+        @field:NotNull(message = "promo.end.date.notnull")
         @JsonProperty("end_date")
         val endDate: Date?
 )

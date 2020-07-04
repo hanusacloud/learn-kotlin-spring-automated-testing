@@ -29,7 +29,7 @@ class PromoController (
     fun create(
             @Valid @RequestBody promoRequest: PromoRequest
     ): ResponseEntity<PromoDetailResponse> {
-        val book: Optional<Book> = bookRepository.findById(promoRequest.bookId)
+        val book: Optional<Book> = bookRepository.findById(promoRequest.bookId!!)
         if (!book.isPresent) {
             throw BookException.notFound()
         }
