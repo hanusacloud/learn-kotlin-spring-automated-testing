@@ -16,5 +16,9 @@ data class PromoRequest @JsonCreator constructor (
 
         @field:NotNull(message = "promo.end.date.notnull")
         @JsonProperty("end_date")
-        val endDate: Date?
+        val endDate: Date?,
+
+        @JsonProperty("promo_price")
+        @field:NotNull(message = "promo.price.notnull")
+        val promoPrice: Long?
 )
