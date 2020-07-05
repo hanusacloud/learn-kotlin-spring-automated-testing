@@ -58,13 +58,13 @@ class PromoControllerIT : BaseIntegration() {
         )
     }
 
-    fun sendCreateRequest(bookId: Long) : ResponseEntity<PromoDetailResponse> {
+    fun sendCreateRequest(bookId: Long, promoPrice: Long) : ResponseEntity<PromoDetailResponse> {
         return sendCreateRequest(
                 PromoRequest(
                         bookId = bookId,
                         startDate = Date(),
                         endDate = Date(),
-                        promoPrice = 390
+                        promoPrice = promoPrice
                 ),
                 PromoDetailResponse::class.java
         )
@@ -72,21 +72,28 @@ class PromoControllerIT : BaseIntegration() {
 
     @Test
     fun shouldBeAbleToCreatePromo() {
-        val response = sendCreateRequest(book.getId()!!)
+        val response = sendCreateRequest(book.getId()!!, 290)
         assertThat(response.body?.getPromo()?.book?.getTitle())
                 .isEqualTo("Test Book For Promo")
     }
 
     @Test
     fun shouldBeAbleToCreatePromoAndReturnPromoPrice() {
-        val response = sendCreateRequest(book.getId()!!)
+        val response = sendCreateRequest(book.getId()!!, 290)
         assertThat(response.body?.getPromo()?.promoPrice)
-                .isEqualTo(390)
+                .isEqualTo(290)
+    }
+
+    @Test
+    fun shouldBeAbleToCreatePromoCausedByPromoPriceHigherThanOriginal() {
+        val response = sendCreateRequest(book.getId()!!, 350)
+        assertThat(response.body?.getMessage())
+                .isEqualTo("Promo price can't be higher than original price!")
     }
 
     @Test
     fun shouldNotBeAbleToCreatePromoOnNonExistingBook() {
-        val response = sendCreateRequest(99999999)
+        val response = sendCreateRequest(99999999, 20)
         assertThat(response.body?.getMessage()).isEqualTo("Book not found!")
     }
 
