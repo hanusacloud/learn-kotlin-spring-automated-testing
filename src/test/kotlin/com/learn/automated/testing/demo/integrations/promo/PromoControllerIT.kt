@@ -72,14 +72,14 @@ class PromoControllerIT : BaseIntegration() {
 
     @Test
     fun shouldBeAbleToCreatePromo() {
-        val response = sendCreateRequest(book.id!!)
+        val response = sendCreateRequest(book.getId()!!)
         assertThat(response.body?.getPromo()?.book?.getTitle())
                 .isEqualTo("Test Book For Promo")
     }
 
     @Test
     fun shouldBeAbleToCreatePromoAndReturnPromoPrice() {
-        val response = sendCreateRequest(book.id!!)
+        val response = sendCreateRequest(book.getId()!!)
         assertThat(response.body?.getPromo()?.promoPrice)
                 .isEqualTo(390)
     }

@@ -3,6 +3,7 @@ package com.learn.automated.testing.demo.features.promo.controllers
 import com.learn.automated.testing.demo.features.book.BookRepository
 import com.learn.automated.testing.demo.features.book.exceptions.BookException
 import com.learn.automated.testing.demo.features.book.models.Book
+import com.learn.automated.testing.demo.features.promo.exceptions.PromoException
 import com.learn.automated.testing.demo.features.promo.models.Promo
 import com.learn.automated.testing.demo.features.promo.reponse.PromoDetailResponse
 import com.learn.automated.testing.demo.features.promo.repositories.PromoRepository
@@ -25,7 +26,7 @@ class PromoController (
 ) {
 
     @RequestMapping(method = [RequestMethod.POST])
-    @Throws(BookException::class)
+    @Throws(BookException::class, PromoException::class)
     fun create(
             @Valid @RequestBody promoRequest: PromoRequest
     ): ResponseEntity<PromoDetailResponse> {
@@ -33,11 +34,15 @@ class PromoController (
         if (!book.isPresent) {
             throw BookException.notFound()
         }
+        val promoPrice = promoRequest.promoPrice!!
+        if (promoPrice >= book.get().getPrice()) {
+            throw PromoException.promoPriceExceedOriginal()
+        }
         val promo = Promo(
                 book = book.get(),
                 startDate = promoRequest.startDate!!,
                 endDate = promoRequest.endDate!!,
-                promoPrice = promoRequest.promoPrice!!
+                promoPrice = promoPrice
         )
         return ResponseEntity(
                 PromoDetailResponse(
