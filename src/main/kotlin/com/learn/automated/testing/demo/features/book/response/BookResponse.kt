@@ -11,27 +11,31 @@ class BookResponse {
     private val title: String
     private val totalPage: Int
     private val createdAt: Date?
+    private val price: Long
 
     @JsonCreator
     constructor(
             @JsonProperty("id") id: Long,
             @JsonProperty("title") title: String,
             @JsonProperty("total_page") totalPage: Int,
-            @JsonProperty("created_at") createdAt: Date?
+            @JsonProperty("created_at") createdAt: Date?,
+            @JsonProperty("price") price: Long
     ) {
         this.id = id
         this.title = title
         this.totalPage = totalPage
         this.createdAt = createdAt
+        this.price = price
     }
 
     constructor(
             book: Book
     ) {
-        this.id = book.id!!
-        this.title = book.title
-        this.totalPage = book.totalPage
-        this.createdAt = book.createdAt
+        this.id = book.getId()!!
+        this.title = book.getTitle()
+        this.totalPage = book.getTotalPage()
+        this.createdAt = book.getCreatedAt()
+        this.price = book.getPrice()
     }
 
     fun getTitle(): String = title
@@ -41,5 +45,7 @@ class BookResponse {
     fun getTotalPage(): Int = totalPage
 
     fun getCreatedAt(): Date? = createdAt
+
+    fun getPrice(): Long = price
 
 }

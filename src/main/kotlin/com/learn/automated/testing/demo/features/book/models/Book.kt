@@ -12,22 +12,48 @@ import javax.persistence.*
 class Book (
         @Id
         @GeneratedValue(strategy = GenerationType.AUTO)
-        var id: Long? = null,
+        private var id: Long? = null,
 
         @Column(name ="title")
-        var title: String,
+        private var title: String,
 
         @Column(name = "total_page")
-        var totalPage: Int,
+        private var totalPage: Int,
 
         @Column(name = "created_at")
         @CreatedDate
-        var createdAt: Date? = null,
+        private var createdAt: Date? = null,
 
         @Column(name = "updated_at")
         @LastModifiedDate
-        var updatedAt: Date? = null,
+        private var updatedAt: Date? = null,
 
         @Column(name = "price")
-        var price: Long
-)
+        private var price: Long
+) {
+
+        fun setTitle(title: String) {
+                this.title = title
+        }
+
+        fun setTotalPage(totalPage: Int) {
+                this.totalPage = totalPage
+        }
+
+        fun setPrice(price: Long) {
+                this.price = price
+        }
+
+        fun getId(): Long? = id
+
+        fun getTitle(): String = title
+
+        fun getTotalPage(): Int = totalPage
+
+        fun getCreatedAt(): Date? = createdAt
+
+        fun getUpdatedAt(): Date? = updatedAt
+
+        fun getPrice(): Long = price
+
+}

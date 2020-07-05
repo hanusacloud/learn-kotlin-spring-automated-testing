@@ -33,8 +33,9 @@ class BookServiceImpl constructor(
             throw BookException.notFound()
         }
         val book = bookOptional.get()
-        book.title = bookRequest.title!!
-        book.totalPage = bookRequest.totalPage!!
+        book.setTitle(bookRequest.title!!)
+        book.setTotalPage(bookRequest.totalPage!!)
+        book.setPrice(bookRequest.price!!)
         return BookDetailResponse(true, "success", repository.save(book))
     }
 

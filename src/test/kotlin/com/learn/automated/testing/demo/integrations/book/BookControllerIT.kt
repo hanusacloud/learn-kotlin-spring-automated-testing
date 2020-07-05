@@ -84,7 +84,7 @@ class BookControllerIT : BaseIntegration() {
     @Test
     fun shouldBeAbleToGetDetailById() {
         val response: ResponseEntity<BookDetailResponse> = sendRequest(
-                "/api/book/${book.id}",
+                "/api/book/${book.getId()}",
                 BookDetailResponse::class.java
         )
         assertThat(response.body?.getBook()?.getTitle()).isEqualTo("Test Title")
@@ -111,10 +111,19 @@ class BookControllerIT : BaseIntegration() {
     @Test
     fun shouldBeAbleToUpdateABook() {
         val response: ResponseEntity<BookDetailResponse> = sendUpdateRequest(
-                book.id!!,
+                book.getId()!!,
                 BookRequest("Test Updated Title", 400, 300)
         )
         assertThat(response.body?.getBook()?.getTitle()).isEqualTo("Test Updated Title")
+    }
+
+    @Test
+    fun shouldBeAbleToUpdateThePriceOfaBook() {
+        val response: ResponseEntity<BookDetailResponse> = sendUpdateRequest(
+                book.getId()!!,
+                BookRequest("Test Updated Title", 400, 3000)
+        )
+        assertThat(response.body?.getBook()?.getPrice()).isEqualTo(3000)
     }
 
     @Test
