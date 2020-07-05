@@ -33,10 +33,10 @@ class ErrorHandler : ResponseEntityExceptionHandler() {
             request: WebRequest
     ): ResponseEntity<Any> {
         super.handleMethodArgumentNotValid(ex, headers, status, request)
-        val errorMessages: MutableList<String> = mutableListOf()
-        for (objectError in ex.bindingResult.allErrors) {
-            objectError.defaultMessage?.let { errorMessages.add(Translation.getMessage(it)) }
-        }
+        val errorMessages = ex.bindingResult.allErrors
+                .filter { it.defaultMessage != null }
+                .map { Translation.getMessage(it.defaultMessage!!) }
+                .toList()
         return ResponseEntity(
                 BaseResponse(
                         false,
