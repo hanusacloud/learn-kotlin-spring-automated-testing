@@ -36,7 +36,7 @@ class PromoController (
         }
         val promoPrice = promoRequest.promoPrice!!
         if (promoPrice >= book.get().getPrice()) {
-            throw PromoException.promoPriceExceedOriginal()
+            throw PromoException.promoPriceExceedsOriginal()
         }
         val promo = Promo(
                 book = book.get(),

@@ -85,7 +85,7 @@ class PromoControllerIT : BaseIntegration() {
     }
 
     @Test
-    fun shouldBeAbleToCreatePromoCausedByPromoPriceHigherThanOriginal() {
+    fun shouldNotBeAbleToCreatePromoCausedByPromoPriceHigherThanOriginal() {
         val response = sendCreateRequest(book.getId()!!, 350)
         assertThat(response.body?.getMessage())
                 .isEqualTo("Promo price can't be higher than original price!")

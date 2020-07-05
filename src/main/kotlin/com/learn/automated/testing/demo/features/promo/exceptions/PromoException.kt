@@ -7,8 +7,8 @@ class PromoException(message: String?) : Exception(message) {
 
     companion object {
 
-        fun promoPriceExceedOriginal(): BookException =
-                BookException(Translation.getMessage("promo.price.exceed.original.price"))
+        fun promoPriceExceedsOriginal(): BookException =
+                BookException(Translation.getMessage("promo.price.exceeds.original.price"))
 
     }
 
