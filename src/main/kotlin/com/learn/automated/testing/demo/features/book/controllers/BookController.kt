@@ -7,6 +7,7 @@ import com.learn.automated.testing.demo.features.book.request.BookRequest
 import com.learn.automated.testing.demo.features.book.response.BookDetailResponse
 import com.learn.automated.testing.demo.features.book.response.BookResponse
 import com.learn.automated.testing.demo.features.book.response.BookResponseList
+import com.learn.automated.testing.demo.features.book.services.BookService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.validation.annotation.Validated
@@ -18,7 +19,8 @@ import javax.validation.Valid
 @Validated
 @RequestMapping("/api/book")
 class BookController (
-        val repository: BookRepository
+        val repository: BookRepository,
+        val service: BookService
 ) {
 
     @GetMapping("/{id}")
@@ -50,17 +52,8 @@ class BookController (
     fun create(
             @Valid @RequestBody bookRequest: BookRequest
     ): ResponseEntity<BookDetailResponse> {
-        val book = Book(
-                title = bookRequest.title!!,
-                totalPage = bookRequest.totalPage!!,
-                price = bookRequest.price!!
-        )
         return ResponseEntity(
-                BookDetailResponse(
-                        true,
-                        "success",
-                        repository.save(book)
-                ),
+                service.create(bookRequest),
                 HttpStatus.OK
         )
     }
@@ -71,15 +64,8 @@ class BookController (
             @PathVariable(name = "id") id: Long,
             @RequestBody bookRequest: BookRequest
     ): ResponseEntity<BookDetailResponse> {
-        val bookOptional: Optional<Book> = repository.findById(id)
-        if (!bookOptional.isPresent) {
-            throw BookException.notFound()
-        }
-        val book = bookOptional.get()
-        book.title = bookRequest.title!!
-        book.totalPage = bookRequest.totalPage!!
         return ResponseEntity(
-                BookDetailResponse(true, "success", repository.save(book)),
+                service.update(id, bookRequest),
                 HttpStatus.OK
         )
     }

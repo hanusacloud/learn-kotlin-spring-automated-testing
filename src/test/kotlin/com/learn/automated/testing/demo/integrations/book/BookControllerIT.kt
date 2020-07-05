@@ -91,7 +91,7 @@ class BookControllerIT : BaseIntegration() {
     }
 
     @Test
-    fun shouldNotBeAbleToGetDetailById() {
+    fun shouldNotBeAbleToGetDetailByIdAndReturnBookNotFoundMessage() {
         val response: ResponseEntity<BookDetailResponse> = sendRequest(
                 "/api/book/99999999",
                 BookDetailResponse::class.java
@@ -118,7 +118,7 @@ class BookControllerIT : BaseIntegration() {
     }
 
     @Test
-    fun shouldNotBeAbleToUpdateABook() {
+    fun shouldNotBeAbleToUpdateABookAndReturnBookNotFoundMessage() {
         val response: ResponseEntity<BookDetailResponse> = sendUpdateRequest(
                 9999999,
                 BookRequest("Test Updated Title", 400, 100)
