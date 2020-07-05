@@ -26,7 +26,8 @@ class PromoDetailResponse : BaseResponse {
             promo: Promo
     ) : super (status, message) {
         this.promo = PromoResponse(
-                promo.id ?: 0,
+                promo.id!!,
+                promo.promoPrice,
                 BookResponse(promo.book),
                 promo.startDate,
                 promo.endDate

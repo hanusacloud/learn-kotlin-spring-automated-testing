@@ -78,6 +78,13 @@ class PromoControllerIT : BaseIntegration() {
     }
 
     @Test
+    fun shouldBeAbleToCreatePromoAndReturnPromoPrice() {
+        val response = sendCreateRequest(book.id!!)
+        assertThat(response.body?.getPromo()?.promoPrice)
+                .isEqualTo(390)
+    }
+
+    @Test
     fun shouldNotBeAbleToCreatePromoOnNonExistingBook() {
         val response = sendCreateRequest(99999999)
         assertThat(response.body?.getMessage()).isEqualTo("Book not found!")
