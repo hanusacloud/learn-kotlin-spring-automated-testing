@@ -8,6 +8,7 @@ import com.learn.automated.testing.demo.features.book.response.BookDetailRespons
 import com.learn.automated.testing.demo.features.book.response.BookResponse
 import com.learn.automated.testing.demo.features.book.response.BookResponseList
 import com.learn.automated.testing.demo.features.book.services.BookService
+import com.learn.automated.testing.demo.features.category.exceptions.CategoryException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.validation.annotation.Validated
@@ -49,6 +50,7 @@ class BookController (
     }
 
     @PostMapping("/create")
+    @Throws(CategoryException::class)
     fun create(
             @Valid @RequestBody bookRequest: BookRequest
     ): ResponseEntity<BookDetailResponse> {

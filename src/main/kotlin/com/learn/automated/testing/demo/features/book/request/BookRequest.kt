@@ -20,5 +20,9 @@ data class BookRequest @JsonCreator constructor (
         @field:NotNull(message = "book.fill.price")
         @field:Min(value = 1, message = "book.price.greater.than.zero")
         @JsonProperty("price")
-        val price: Long?
+        val price: Long?,
+
+        @field:NotNull(message = "category.not.null")
+        @JsonProperty("category_id")
+        val categoryId: Long?
 )

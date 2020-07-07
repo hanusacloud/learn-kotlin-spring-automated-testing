@@ -26,10 +26,6 @@ class BookDetailResponse : BaseResponse {
         this.book = BookResponse(book)
     }
 
-    constructor(message: String) : super (false, message) {
-        this.book = null
-    }
-
     fun getBook(): BookResponse? = book
 
 }

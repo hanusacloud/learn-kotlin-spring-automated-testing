@@ -1,5 +1,6 @@
 package com.learn.automated.testing.demo.features.book.models
 
+import com.learn.automated.testing.demo.features.category.models.Category
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
@@ -29,7 +30,11 @@ class Book (
         private var updatedAt: Date? = null,
 
         @Column(name = "price")
-        private var price: Long
+        private var price: Long,
+
+        @ManyToOne
+        @JoinColumn(name = "category_id")
+        private var category: Category
 ) {
 
         fun setTitle(title: String) {
@@ -55,5 +60,7 @@ class Book (
         fun getUpdatedAt(): Date? = updatedAt
 
         fun getPrice(): Long = price
+
+        fun getCategory(): Category = category
 
 }

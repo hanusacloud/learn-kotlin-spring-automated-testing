@@ -5,3 +5,4 @@ jsonRequest;expected
 {"title":"Title for empty total page","total_page":null,"price":34};Fill total page!
 {"title":"Title for empty price","total_page":30,"price":0};Price must be greater than zero!
 {"title":"Title for empty price","total_page":30,"price":null};Fill the price!
+{"title":"Title for empty price","total_page":30,"price":10,"category_id":null};Fill category!
