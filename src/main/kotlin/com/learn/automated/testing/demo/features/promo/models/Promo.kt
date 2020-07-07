@@ -16,6 +16,7 @@ class Promo (
         var id: Long? = null,
 
         @ManyToOne
+        @JoinColumn(name = "book_id")
         var book: Book,
 
         @Column(name = "promo_price")
