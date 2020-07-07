@@ -2,6 +2,8 @@ package com.learn.automated.testing.demo.integrations.promo
 
 import com.learn.automated.testing.demo.features.book.BookRepository
 import com.learn.automated.testing.demo.features.book.models.Book
+import com.learn.automated.testing.demo.features.category.models.Category
+import com.learn.automated.testing.demo.features.category.repositories.CategoryRepository
 import com.learn.automated.testing.demo.features.promo.controllers.PromoController
 import com.learn.automated.testing.demo.features.promo.reponse.PromoDetailResponse
 import com.learn.automated.testing.demo.features.promo.repositories.PromoRepository
@@ -27,12 +29,24 @@ class PromoControllerIT : BaseIntegration() {
     private lateinit var repository: PromoRepository
     @Autowired
     private lateinit var bookRepository: BookRepository
+    @Autowired
+    private lateinit var categoryRepository: CategoryRepository
 
     lateinit var book: Book
 
     @BeforeEach
     fun setUp() {
-        book = bookRepository.save(Book(title = "Test Book For Promo", totalPage = 500, price = 300))
+        val category: Category = categoryRepository.save(
+                Category(name = "Sport")
+        )
+        book = bookRepository.save(
+                Book(
+                        title = "Test Book For Promo",
+                        totalPage = 500,
+                        price = 300,
+                        category = category
+                )
+        )
     }
 
     @AfterEach
@@ -41,6 +55,8 @@ class PromoControllerIT : BaseIntegration() {
         repository.flush()
         bookRepository.deleteAll()
         bookRepository.flush()
+        categoryRepository.deleteAll()
+        categoryRepository.flush()
     }
 
     fun <T, P> sendCreateRequest(
@@ -94,7 +110,8 @@ class PromoControllerIT : BaseIntegration() {
     @Test
     fun shouldNotBeAbleToCreatePromoOnNonExistingBook() {
         val response = sendCreateRequest(99999999, 20)
-        assertThat(response.body?.getMessage()).isEqualTo("Book not found!")
+        assertThat(response.body?.getMessage())
+                .isEqualTo("Book not found!")
     }
 
     @ParameterizedTest
