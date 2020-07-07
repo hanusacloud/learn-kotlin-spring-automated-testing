@@ -1,6 +1,7 @@
 package com.learn.automated.testing.demo.shared.exception
 
 import com.learn.automated.testing.demo.features.book.exceptions.BookException
+import com.learn.automated.testing.demo.features.category.exceptions.CategoryException
 import com.learn.automated.testing.demo.shared.responses.BaseResponse
 import com.learn.automated.testing.demo.shared.utils.Translation
 import org.springframework.http.HttpHeaders
@@ -15,15 +16,24 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @RestControllerAdvice
 class ErrorHandler : ResponseEntityExceptionHandler() {
 
-    @ExceptionHandler(BookException::class)
-    fun handle(exception: BookException): ResponseEntity<BaseResponse> {
+    private fun generateResponse(message: String?): ResponseEntity<BaseResponse> {
         return ResponseEntity(
                 BaseResponse(
                         false,
-                        exception.message ?: "Oops.. something happened"
+                        message ?: "Oops.. something happened"
                 ),
                 HttpStatus.INTERNAL_SERVER_ERROR
         )
+    }
+
+    @ExceptionHandler(BookException::class)
+    fun handle(exception: BookException): ResponseEntity<BaseResponse> {
+        return generateResponse(exception.message)
+    }
+
+    @ExceptionHandler(CategoryException::class)
+    fun handleCategory(exception: CategoryException): ResponseEntity<BaseResponse> {
+        return generateResponse(exception.message)
     }
 
     override fun handleMethodArgumentNotValid(
