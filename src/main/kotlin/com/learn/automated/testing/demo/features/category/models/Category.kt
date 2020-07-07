@@ -1,4 +1,4 @@
-package com.learn.automated.testing.demo.features.category
+package com.learn.automated.testing.demo.features.category.models
 
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.LastModifiedDate
@@ -12,7 +12,7 @@ import javax.persistence.*
 class Category (
         @Id
         @GeneratedValue(strategy = GenerationType.AUTO)
-        private var id: Long?,
+        private var id: Long? = null,
 
         @Column(name = "name")
         private var name: String,
@@ -24,4 +24,10 @@ class Category (
         @Column(name = "updated_at")
         @LastModifiedDate
         private var updatedAt: Date? = null
-)
+) {
+
+        fun getId(): Long? = id
+
+        fun getName(): String = name
+
+}
