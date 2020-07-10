@@ -224,9 +224,9 @@ class BookControllerIT : BaseIntegration() {
             delimiter = ';',
             numLinesToSkip = 1
     )
-    fun shouldBeAbleToTestFormRequestValidation(jsonRequest: String, expected: String) {
+    fun shouldBeAbleToTestFormRequestValidation(jsonString: String, expected: String) {
         val response: ResponseEntity<BookDetailResponse> = sendCreateRequest(
-                jsonRequest,
+                jsonString,
                 BookDetailResponse::class.java
         )
         assertThat(response.body?.getErrorMessages())

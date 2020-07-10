@@ -121,10 +121,10 @@ class PromoControllerIT : BaseIntegration() {
             numLinesToSkip = 1
     )
     fun shouldNotBeAbleToCreatePromoWhenMissingValue(
-            jsonRequest: String,
+            jsonString: String,
             expected: String
     ) {
-        val response = sendCreateRequest(jsonRequest, PromoDetailResponse::class.java)
+        val response = sendCreateRequest(jsonString, PromoDetailResponse::class.java)
         assertThat(response.body?.getErrorMessages())
                 .containsAnyElementsOf(
                         arrayListOf(

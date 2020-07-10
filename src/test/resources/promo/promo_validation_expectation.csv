@@ -1,4 +1,4 @@
-jsonRequest;expected
+jsonString;expected
 {"book_id":null,"start_date":1593523779655,"end_date":1593523779655,"promo_price":390};Book id not found!
 {"book_id":34,"start_date":1593523779655,"end_date":1593523779655,"promo_price":null};Fill promo price!
 {"book_id":77,"start_date":1593523779655,"promo_price":390};Fill end date!
