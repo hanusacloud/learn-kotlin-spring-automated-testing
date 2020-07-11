@@ -2,8 +2,8 @@ package com.learn.automated.testing.demo.shared.exception
 
 import com.learn.automated.testing.demo.features.book.exceptions.BookException
 import com.learn.automated.testing.demo.features.category.exceptions.CategoryException
-import com.learn.automated.testing.demo.shared.responses.BaseResponse
 import com.learn.automated.testing.demo.shared.utils.Translation
+import com.learn.common.shared.BaseResponse
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity

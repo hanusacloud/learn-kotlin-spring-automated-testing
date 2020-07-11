@@ -4,10 +4,13 @@ import com.learn.automated.testing.demo.features.book.BookRepository
 import com.learn.automated.testing.demo.features.book.exceptions.BookException
 import com.learn.automated.testing.demo.features.book.models.Book
 import com.learn.automated.testing.demo.features.book.request.BookRequest
-import com.learn.automated.testing.demo.features.book.response.BookDetailResponse
-import com.learn.automated.testing.demo.features.category.models.Category
+import com.learn.automated.testing.demo.features.book.response.BookResponseList
 import com.learn.automated.testing.demo.features.category.exceptions.CategoryException
+import com.learn.automated.testing.demo.features.category.models.Category
 import com.learn.automated.testing.demo.features.category.repositories.CategoryRepository
+import com.learn.common.features.book.BookResponse
+import com.learn.common.features.book.BookDetailResponse
+import com.learn.common.features.category.CategoryResponse
 import org.springframework.stereotype.Service
 import java.util.*
 
@@ -16,6 +19,25 @@ class BookServiceImpl constructor(
         val repository: BookRepository,
         val categoryRepository: CategoryRepository
 ) : BookService {
+
+    override fun detail(bookId: Long): BookDetailResponse {
+        val book: Book = repository.findById(bookId)
+                .orElseThrow { BookException.notFound() }
+
+        return BookDetailResponse(
+                true,
+                "success",
+                generateBookResponse(book)
+        )
+    }
+
+    override fun getAll(): BookResponseList {
+        val book: List<Book> = repository.findAll()
+        return BookResponseList(
+                true,
+                "success",
+                book.map { e -> generateBookResponse(e) }.toList())
+    }
 
     override fun create(bookRequest: BookRequest): BookDetailResponse {
         val categoryOptional: Optional<Category> = categoryRepository.findById(
@@ -33,7 +55,7 @@ class BookServiceImpl constructor(
         return BookDetailResponse(
                 true,
                 "success",
-                repository.save(book)
+                generateBookResponse(repository.save(book))
         )
     }
 
@@ -47,7 +69,22 @@ class BookServiceImpl constructor(
         book.setTitle(bookRequest.title!!)
         book.setTotalPage(bookRequest.totalPage!!)
         book.setPrice(bookRequest.price!!)
-        return BookDetailResponse(true, "success", repository.save(book))
+        return BookDetailResponse(
+                true,
+                "success",
+                generateBookResponse(repository.save(book))
+        )
+    }
+
+    private fun generateBookResponse(book: Book): BookResponse {
+        return BookResponse(
+                book.getId()!!,
+                book.getTitle(),
+                book.getTotalPage(),
+                book.getCreatedAt(),
+                book.getPrice(),
+                CategoryResponse(book.getCategory().getId()!!, book.getCategory().getName())
+        )
     }
 
 }

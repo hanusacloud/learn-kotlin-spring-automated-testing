@@ -13,3 +13,7 @@ pluginManagement {
 	}
 }
 rootProject.name = "demo"
+println(File("../common").exists())
+include(":common")
+include(":common.main")
+project(":common").projectDir = File("../common")

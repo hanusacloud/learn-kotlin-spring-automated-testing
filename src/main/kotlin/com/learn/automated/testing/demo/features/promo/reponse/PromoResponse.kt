@@ -2,7 +2,7 @@ package com.learn.automated.testing.demo.features.promo.reponse
 
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.learn.automated.testing.demo.features.book.response.BookResponse
+import com.learn.common.features.book.BookResponse
 import java.util.*
 
 data class PromoResponse @JsonCreator constructor (

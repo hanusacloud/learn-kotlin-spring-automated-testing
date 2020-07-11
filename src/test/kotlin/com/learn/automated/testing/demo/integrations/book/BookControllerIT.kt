@@ -4,11 +4,11 @@ import com.learn.automated.testing.demo.features.book.BookRepository
 import com.learn.automated.testing.demo.features.book.controllers.BookController
 import com.learn.automated.testing.demo.features.book.models.Book
 import com.learn.automated.testing.demo.features.book.request.BookRequest
-import com.learn.automated.testing.demo.features.book.response.BookDetailResponse
 import com.learn.automated.testing.demo.features.book.response.BookResponseList
 import com.learn.automated.testing.demo.features.category.models.Category
 import com.learn.automated.testing.demo.features.category.repositories.CategoryRepository
 import com.learn.automated.testing.demo.integrations.BaseIntegration
+import com.learn.common.features.book.BookDetailResponse
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -64,7 +64,7 @@ class BookControllerIT : BaseIntegration() {
     private fun <T> sendRequest(path: String, type: Class<T>) : ResponseEntity<T> {
         val httpHeaders = HttpHeaders()
         httpHeaders.contentType = MediaType.APPLICATION_JSON
-        val entity: HttpEntity<String> = HttpEntity(null, httpHeaders)
+        val entity: HttpEntity<String?> = HttpEntity(null, httpHeaders)
         return restTemplate.exchange(
                 getUrl(path),
                 HttpMethod.GET,
